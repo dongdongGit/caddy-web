@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  caddy:
+    image: writing/caddy-naiveproxy:0.0.1
+    restart: unless-stopped
+    ports:
+     - 443:443
+     - 443:443/udp
+    volumes:
+     - $PWD/caddy/Caddyfile:/etc/caddy/Caddyfile
+     - $PWD/site/:/srv/site/
+     - $PWD/caddy/log/:/var/log/
+     - $PWD/caddy/caddy_data:/data
+    environment:
+     - DNSPODCN_APP_ID=
+     - DNSPODCN_APP_TOKEN=
+     - CLOUDFLARE_API_TOKEN=
+
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+     - 19445:80
+    volumes:
+     - $PWD/vaultwarden:/data:rw
+    environment:
+     - SIGNUPS_ALLOWED=false
+
+  mind-map:
+    image: shuiche/mind-map:latest
+    restart: unless-stopped
+    ports:
+     - 18081:8080
+
+networks:
+  default:
+    external: true
+    name: web_net
+
+volumes:
+  caddy_data: {}

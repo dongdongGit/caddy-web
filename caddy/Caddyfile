@@ -1,0 +1,75 @@
+# The Caddyfile is an easy way to configure your Caddy web server.
+#
+# Unless the file starts with a global options block, the first
+# uncommented line is always the address of your site.
+#
+# To use your own domain name (with automatic HTTPS), first make
+# sure your domain's A/AAAA DNS records are properly pointed to
+# this machine's public IP, then replace ":80" below with your
+# domain name.
+
+# :80 {
+	# Set this path to your site's directory.
+	# root * /usr/share/caddy
+
+	# Enable the static file server.
+	# file_server
+
+	# Another common task is to set up a reverse proxy:
+	# reverse_proxy localhost:8080
+
+	# Or serve a PHP site through php-fpm:
+	# php_fastcgi localhost:9000
+# }
+
+# Refer to the Caddy docs for more information:
+# https://caddyserver.com/docs/caddyfile
+(dnspodcn) {
+    dns dnspodcn {env.DNSPODCN_APP_ID} {env.DNSPODCN_APP_TOKEN}
+}
+
+(cf) {
+    dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+}
+
+{
+    order forward_proxy before file_server
+}
+
+:443, your.domain {
+    encode zstd gzip
+    tls {
+        import dnspodcn
+    }
+
+    forward_proxy {
+        # 替换用户名密码
+        basic_auth Username Password
+        hide_ip
+        hide_via
+        probe_resistance
+    }
+
+    file_server {
+        root /srv/site/your.domain
+    }
+    
+    log {
+        output file /var/log/app.log
+    }
+}
+
+your.domain {
+    encode zstd gzip
+    tls {
+        import dnspodcn
+    }
+    log {
+        output file /var/log/vaultwarden.log
+    }
+    reverse_proxy vaultwarden {
+        # Send the true remote IP to Rocket, so that vaultwarden can put this in the
+        # log, so that fail2ban can ban the correct IP.
+        header_up X-Real-IP {remote_host}
+   }
+}
