@@ -12,8 +12,9 @@ docker network create \
   web_net
 ```
 ### 2.防火墙放通br0
+通过`ifconfig`找到对应web_net的虚拟网卡
 ```bash
-firewall-cmd --zone=trusted --add-interface=br0 --permanent
+firewall-cmd --zone=trusted --add-interface=br-{替换} --permanent
 ```
 重载防火墙
 ```bash
