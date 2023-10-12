@@ -16,8 +16,6 @@ services:
       - DNSPODCN_APP_ID=
       - DNSPODCN_APP_TOKEN=
       - CLOUDFLARE_API_TOKEN=
-      - FORWARD_PROXY_USERNAME=
-      - FORWARD_PROXY_PASSWORD=
 
   vaultwarden:
     image: vaultwarden/server:latest
