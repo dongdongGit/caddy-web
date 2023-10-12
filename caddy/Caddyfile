@@ -33,7 +33,7 @@
 }
 
 {
-    order forward_proxy before file_server
+    order forward_proxy first
 }
 
 :443, your.domain {
