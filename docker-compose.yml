@@ -16,6 +16,8 @@ services:
       - DNSPODCN_APP_ID=
       - DNSPODCN_APP_TOKEN=
       - CLOUDFLARE_API_TOKEN=
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   vaultwarden:
     image: vaultwarden/server:latest
