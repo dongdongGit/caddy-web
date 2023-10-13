@@ -37,7 +37,7 @@ services:
       - 18081:8080
 
   v2ray:
-    image: zydou/v2ray:v5.2.1
+    image: zydou/v2ray:v4.45.2
     environment:
       - TZ=Asia/Shanghai  # set desired timezone
     ports:
