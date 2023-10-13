@@ -45,6 +45,7 @@ services:
       - $PWD/v2ray/config.json:/etc/v2ray/config.json
       - $PWD/v2ray/logs:/var/log/v2ray/
     restart: unless-stopped
+    command: v2ray run -config=/etc/v2ray/config.json
 
 networks:
   default:
