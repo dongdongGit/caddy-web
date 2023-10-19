@@ -13,15 +13,11 @@ services:
       - $PWD/caddy/log/:/var/log/
       - $PWD/caddy/caddy_data:/data
     environment:
-      - DNSPODCN_APP_ID=dnspodcn_app_id
-      - DNSPODCN_APP_TOKEN=dnspodcn_app_token
-      - CLOUDFLARE_API_TOKEN=cloudflare_api_token
+      - DNSPODCN_APP_ID=
+      - DNSPODCN_APP_TOKEN=
+      - CLOUDFLARE_API_TOKEN=
     extra_hosts:
       - host.docker.internal:host-gateway
-    secrets:
-      - dnspodcn_app_id
-      - dnspodcn_app_token
-      - cloudflare_api_token
 
   vaultwarden:
     image: vaultwarden/server:latest
@@ -50,14 +46,6 @@ services:
       - $PWD/v2ray/logs:/var/log/v2ray/
     restart: unless-stopped
     command: ["run", "-c", "/etc/v2ray/config.json"]
-
-secrets:
-  dnspodcn_app_id:
-    file: dnspodcn_app_id.txt
-  dnspodcn_app_token:
-    file: dnspodcn_app_token.txt
-  cloudflare_api_token:
-    file: cloudflare_api_token.txt
 
 networks:
   default:
